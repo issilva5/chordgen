@@ -36,29 +36,31 @@ def get_english_prompt(genre, theme, key=None, style=None, mood=None):
                  {key_prompt}You must put the chords OVER the lyrics where the chord change should occur. 
                  Add the key that generated the chord progression in the beginning of the output.
                  Put the metadata of the song between [], such as [Verse 1], [Chorus].
+                 The chords must be between dots. Each lyric verse must start with >.
 
                  The format must follow the example below:
 
                     Key: Cm
 
-                    [Intro]
-                    G,  D,  Em,  C
+                    [Intro] 
+                    .B.  .B11.  .B.  
+                    .B.  .B11.  .B.
+                    .B.  .F#6(11).  .E7M.  
 
                     [Verse 1]
-                    Cm,                            G#, 
-                    >I see you there, lying so peaceful 
-                    Bb,                             G#, 
-                    >As if you were just taking a nap
-                    Cm,                               G#,
-                    >But you left me here, full of anger 
-                    Bb,                       G#,
-                    >And there's no way that I'm gonna let that pass
 
-                    [Pre-Chorus]
-                    Ab,                      Bb,
-                    >Every time I close my eyes 
-                    G#,                      Ab,
-                    >I see you and I realize 
+                    .B.
+                    >Look at the stars
+                                        .F#6(11).
+                    >Look how the shine for you
+                                        .E7M.
+                    >And everything you do
+
+                    >Yeah, they were all yellow
+                    .B.
+                    >I came along
+                                    .F#6(11).
+                    >I wrote a song for you
 
               """
 
