@@ -9,14 +9,16 @@ openai.organization = os.getenv("ORG_ID")
 
 app = Flask(__name__)
 
-def get_prompt(lang, genre, theme, key = None, style = None, mood = None):
+
+def get_prompt(lang, genre, theme, key=None, style=None, mood=None):
     if lang == 'en':
         return get_english_prompt(genre, theme, key, style, mood)
-    
+
     if lang == 'pt-br' or lang == 'pt':
         return get_portuguese_prompt(genre, theme, key, style, mood)
 
-def get_english_prompt(genre, theme, key = None, style = None, mood = None):
+
+def get_english_prompt(genre, theme, key=None, style=None, mood=None):
 
     key_prompt = ""
     if key:
@@ -25,7 +27,7 @@ def get_english_prompt(genre, theme, key = None, style = None, mood = None):
     style_prompt = ""
     if style:
         style_prompt = f", with the {style} style"
-    
+
     mood_prompt = ""
     if mood:
         mood_prompt = f", with a {mood} mood"
@@ -40,30 +42,31 @@ def get_english_prompt(genre, theme, key = None, style = None, mood = None):
                     Key: Cm
 
                     [Intro]
-                    G,  D,  Em,  C,
+                    G  D  Em  C
 
                     [Verse 1]
-                    Cm,                            G#, 
+                    Cm                            G# 
                     >I see you there, lying so peaceful 
-                    Bb,                             G#, 
+                    Bb                             G# 
                     >As if you were just taking a nap
-                    Cm,                               G#,
+                    Cm                               G#
                     >But you left me here, full of anger 
-                    Bb,                       G#,
+                    Bb                       G#
                     >And there's no way that I'm gonna let that pass
 
                     [Pre-Chorus]
-                    Ab,                      Bb,
+                    Ab                      Bb
                     >Every time I close my eyes 
-                    G#,                       Ab,
+                    G#                      Ab
                     >I see you and I realize 
 
               """
-    
+
     return prompt
 
-def get_portuguese_prompt(genre, theme, key = None, style = None, mood = None):
-    
+
+def get_portuguese_prompt(genre, theme, key=None, style=None, mood=None):
+
     key_prompt = ""
     if key:
         key_prompt = f"O Tom da música deve ser em {key}. "
@@ -71,7 +74,7 @@ def get_portuguese_prompt(genre, theme, key = None, style = None, mood = None):
     style_prompt = ""
     if style:
         style_prompt = f", com o estilo de {style}"
-    
+
     mood_prompt = ""
     if mood:
         mood_prompt = f", com um humor {mood}"
@@ -86,23 +89,24 @@ def get_portuguese_prompt(genre, theme, key = None, style = None, mood = None):
                     Tom: G
                     
                     [Intro]
-                    G,  D,  Em,  C,
+                    G  D  Em  C
                     
                     [Verso 1]
-                    G,                D,
+                    G               D
                     >Eu sei que já me esqueceu
-                    Em,               C,
+                    Em              C
                     >Mas eu ainda penso em você
-                    G,               D,
+                    G               D
                     >A gente viveu um sonho
-                    Em,               C,s
+                    Em               C
                     >Que agora virou pesadelo
               """
-    
+
     return prompt
 
+
 def generate_song(prompt):
-    
+
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0301",
         messages=[
@@ -113,7 +117,7 @@ def generate_song(prompt):
     return completion.choices[0].message
 
 
-@app.route("/generate", methods = ['POST'])
+@app.route("/generate", methods=['POST'])
 def generate():
 
     req_data = request.get_json()
@@ -130,6 +134,7 @@ def generate():
     print(response['content'].split('\n'))
 
     return {'music': response['content'].split('\n')}
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
