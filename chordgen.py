@@ -33,6 +33,32 @@ def get_english_prompt(genre, theme, key = None, style = None, mood = None):
     prompt = f"""Generate the lyrics and chord progression of a {genre} song about {theme}{style_prompt}{mood_prompt}.
                  {key_prompt}You must put the chords OVER the lyrics where the chord change should occur. 
                  Add the key that generated the chord progression in the beginning of the output.
+                 Mark the start of the lines containing chords with a '*' symbol.
+                 Put the metadata of the song between [], such as [Verse 1], [Chorus].
+
+                 The format must follow the example below:
+
+                    Key: Cm
+
+                    [Intro]
+                    *G  D  Em  C
+
+                    [Verse 1]
+                    *Cm                            G# 
+                    I see you there, lying so peaceful 
+                    *Bb                             G# 
+                    As if you were just taking a nap
+                    *Cm                               G#
+                    But you left me here, full of anger 
+                    *Bb                                 G#
+                    And there's no way that I'm gonna let that pass
+
+                    [Pre-Chorus]
+                    *Ab                      Bb
+                    Every time I close my eyes 
+                    *G#                       Ab
+                    I see you and I realize 
+
               """
     
     return prompt
@@ -51,11 +77,27 @@ def get_portuguese_prompt(genre, theme, key = None, style = None, mood = None):
     if mood:
         mood_prompt = f", com um humor {mood}"
 
-    prompt = f"""Gerar a letra e a notação de acordes de uma música {genre} sobre {theme}{style_prompt}{mood_prompt}.
-                 Você deve colocar os acordes sobre a letra onde ocorrer a mudança de acordes.
-                 {key_prompt}A música deve ter uma Intro, formada por uma sequencia de acordes.
-                 O Tom da música deve ser explicitado na primeira linha.
-                 Além disso, por favor, coloque os metadados da música entre colchetes, por exemplo [Verso 1], [Refrão].
+    prompt = f"""Gere a letra e a progressão de acordes de uma música do gênero {genre} sobre {theme}{style_prompt}{mood_prompt}. 
+                 {key_prompt}Você deve colocar os acordes SOBRE as letras onde a mudança de acorde deve ocorrer. 
+                 Adicione o tom que gerou a progressão de acordes no início da saída.
+                 Coloque um asterisco no início das linhas contendo acordes.
+                 Coloque os metadados da música entre [], como [Verso 1], [Refrão].
+
+                 O formato deve seguir o exemplo abaixo:
+                    Tom: G
+                    
+                    [Intro]
+                    *G  D  Em  C
+                    
+                    [Verso 1]
+                    *G                D
+                    Eu sei que já me esqueceu
+                    *Em                  C
+                    *Mas eu ainda penso em você
+                    *G               D
+                    A gente viveu um sonho
+                    *Em               C
+                    Que agora virou pesadelo
               """
     
     return prompt
