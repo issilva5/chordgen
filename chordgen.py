@@ -9,7 +9,14 @@ openai.organization = os.getenv("ORG_ID")
 
 app = Flask(__name__)
 
-def get_prompt(genre, theme, style = None, mood = None):
+def get_prompt(lang, genre, theme, style = None, mood = None):
+    if lang == 'en':
+        return get_english_prompt(genre, theme, style, mood)
+    
+    if lang == 'pt-br':
+        return get_portuguese_prompt(genre, theme, style, mood)
+
+def get_english_prompt(genre, theme, style = None, mood = None):
 
     style_prompt = ""
     if style:
@@ -19,11 +26,30 @@ def get_prompt(genre, theme, style = None, mood = None):
     if mood:
         mood_prompt = f", with a {mood} mood"
 
-    prompt = f"""Generate the lyrics and chord notation of a {genre} song about {theme}{style_prompt}{mood_prompt}. 
+    prompt = f"""Generate the lyrics and chord progression of a {genre} song about {theme}{style_prompt}{mood_prompt}. 
                  You must put the chords over the lyrics where the chord change should occur.
                  The song must have an Intro.
-                 The key of the song must be explicited in the first line.
+                 The Key/Tonality of the chord progression must be explicited in the first line.
                  Also, please put the metadata of the song between [], for example [Verse 1], [Chorus].
+              """
+    
+    return prompt
+
+def get_portuguese_prompt(genre, theme, style = None, mood = None):
+    
+    style_prompt = ""
+    if style:
+        style_prompt = f", com o estilo de {style}"
+    
+    mood_prompt = ""
+    if mood:
+        mood_prompt = f", com um humor {mood}"
+
+    prompt = f"""Gerar a letra e a notação de acordes de uma música {genre} sobre {theme}{style_prompt}{mood_prompt}.
+                 Você deve colocar os acordes sobre a letra onde ocorrer a mudança de acordes.
+                 A música deve ter uma Introdução.
+                 O Tom da música deve ser explicitado na primeira linha.
+                 Além disso, por favor, coloque os metadados da música entre colchetes, por exemplo [Verso 1], [Refrão].
               """
     
     return prompt
@@ -48,13 +74,14 @@ def generate():
     theme = req_data.get('theme')
     style = req_data.get('style')
     mood = req_data.get('mood')
+    lang = req_data.get('lang')
 
-    prompt = get_prompt(genre, theme, style, mood)
+    prompt = get_prompt(lang, genre, theme, style, mood)
     response = generate_song(prompt)
 
     print(response['content'].split('\n'))
 
     return {'music': response['content'].split('\n')}
 
-
-app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
