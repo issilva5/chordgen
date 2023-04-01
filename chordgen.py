@@ -2,6 +2,11 @@ import os
 import openai
 from flask import Flask, request
 from dotenv import load_dotenv
+from flask_cors import CORS, cross_origin
+
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -120,6 +125,7 @@ def generate_song(prompt):
 
 
 @app.route("/generate", methods=['POST'])
+@cross_origin()
 def generate():
 
     req_data = request.get_json()
@@ -136,7 +142,6 @@ def generate():
     print(response['content'].split('\n'))
 
     return {'music': response['content'].split('\n')}
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001)
