@@ -9,14 +9,18 @@ openai.organization = os.getenv("ORG_ID")
 
 app = Flask(__name__)
 
-def get_prompt(lang, genre, theme, style = None, mood = None):
+def get_prompt(lang, genre, theme, key = None, style = None, mood = None):
     if lang == 'en':
-        return get_english_prompt(genre, theme, style, mood)
+        return get_english_prompt(genre, theme, key, style, mood)
     
     if lang == 'pt-br':
-        return get_portuguese_prompt(genre, theme, style, mood)
+        return get_portuguese_prompt(genre, theme, key, style, mood)
 
-def get_english_prompt(genre, theme, style = None, mood = None):
+def get_english_prompt(genre, theme, key = None, style = None, mood = None):
+
+    key_prompt = ""
+    if key:
+        key_prompt = f"The key of the chord progression must be in {key}. "
 
     style_prompt = ""
     if style:
@@ -27,14 +31,18 @@ def get_english_prompt(genre, theme, style = None, mood = None):
         mood_prompt = f", with a {mood} mood"
 
     prompt = f"""Generate the lyrics and chord progression of a {genre} song about {theme}{style_prompt}{mood_prompt}.
-                 You must put the chords OVER the lyrics where the chord change should occur. 
+                 {key_prompt}You must put the chords OVER the lyrics where the chord change should occur. 
                  Add the key that generated the chord progression in the beginning of the output.
               """
     
     return prompt
 
-def get_portuguese_prompt(genre, theme, style = None, mood = None):
+def get_portuguese_prompt(genre, theme, key = None, style = None, mood = None):
     
+    key_prompt = ""
+    if key:
+        key_prompt = f"O Tom da música deve ser em {key}. "
+
     style_prompt = ""
     if style:
         style_prompt = f", com o estilo de {style}"
@@ -45,7 +53,7 @@ def get_portuguese_prompt(genre, theme, style = None, mood = None):
 
     prompt = f"""Gerar a letra e a notação de acordes de uma música {genre} sobre {theme}{style_prompt}{mood_prompt}.
                  Você deve colocar os acordes sobre a letra onde ocorrer a mudança de acordes.
-                 A música deve ter uma Intro, formada por uma sequencia de acordes.
+                 {key_prompt}A música deve ter uma Intro, formada por uma sequencia de acordes.
                  O Tom da música deve ser explicitado na primeira linha.
                  Além disso, por favor, coloque os metadados da música entre colchetes, por exemplo [Verso 1], [Refrão].
               """
@@ -73,8 +81,9 @@ def generate():
     style = req_data.get('style')
     mood = req_data.get('mood')
     lang = req_data.get('lang')
+    key = req_data.get('key')
 
-    prompt = get_prompt(lang, genre, theme, style, mood)
+    prompt = get_prompt(lang, genre, theme, key, style, mood)
     response = generate_song(prompt)
 
     print(response['content'].split('\n'))
