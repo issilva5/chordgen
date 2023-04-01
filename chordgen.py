@@ -10,7 +10,7 @@ openai.organization = os.getenv("ORG_ID")
 app = Flask(__name__)
 
 def generate_song(genre, theme, style):
-    prompt = f"Generate the lyrics and chord notation of a {genre} song about {theme} with the {style} style. You must put the chords where the chord change should occur."
+    prompt = f"Generate the lyrics and chord notation of a {genre} song about {theme} with the {style} style. You must put the chords over the lyrics where the chord change should occur."
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -29,6 +29,11 @@ def generate():
     theme = req_data['theme']
     style = req_data['style']
 
-    return generate_song(genre, theme, style)
+    response = generate_song(genre, theme, style)
+
+    print(response['content'].split('\n'))
+
+    return {'music': response['content'].split('\n')}
+
 
 app.run(host='0.0.0.0', port=5000)
