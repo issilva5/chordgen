@@ -26,11 +26,9 @@ def get_english_prompt(genre, theme, style = None, mood = None):
     if mood:
         mood_prompt = f", with a {mood} mood"
 
-    prompt = f"""Generate the lyrics and chord progression of a {genre} song about {theme}{style_prompt}{mood_prompt}. 
-                 You must put the chords over the lyrics where the chord change should occur.
-                 The song must have an Intro.
-                 The Key/Tonality of the chord progression must be explicited in the first line.
-                 Also, please put the metadata of the song between [], for example [Verse 1], [Chorus].
+    prompt = f"""Generate the lyrics and chord progression of a {genre} song about {theme}{style_prompt}{mood_prompt}.
+                 You must put the chords OVER the lyrics where the chord change should occur. 
+                 Add the key that generated the chord progression in the beginning of the output.
               """
     
     return prompt
@@ -47,7 +45,7 @@ def get_portuguese_prompt(genre, theme, style = None, mood = None):
 
     prompt = f"""Gerar a letra e a notação de acordes de uma música {genre} sobre {theme}{style_prompt}{mood_prompt}.
                  Você deve colocar os acordes sobre a letra onde ocorrer a mudança de acordes.
-                 A música deve ter uma Introdução.
+                 A música deve ter uma Intro, formada por uma sequencia de acordes.
                  O Tom da música deve ser explicitado na primeira linha.
                  Além disso, por favor, coloque os metadados da música entre colchetes, por exemplo [Verso 1], [Refrão].
               """
@@ -57,7 +55,7 @@ def get_portuguese_prompt(genre, theme, style = None, mood = None):
 def generate_song(prompt):
     
     completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-0301",
         messages=[
             {"role": "user", "content": prompt}
         ]
