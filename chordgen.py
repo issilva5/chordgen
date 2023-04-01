@@ -42,22 +42,22 @@ def get_english_prompt(genre, theme, key=None, style=None, mood=None):
                     Key: Cm
 
                     [Intro]
-                    G  D  Em  C
+                    G,  D,  Em,  C
 
                     [Verse 1]
-                    Cm                            G# 
+                    Cm,                            G#, 
                     >I see you there, lying so peaceful 
-                    Bb                             G# 
+                    Bb,                             G#, 
                     >As if you were just taking a nap
-                    Cm                               G#
+                    Cm,                               G#,
                     >But you left me here, full of anger 
-                    Bb                       G#
+                    Bb,                       G#,
                     >And there's no way that I'm gonna let that pass
 
                     [Pre-Chorus]
-                    Ab                      Bb
+                    Ab,                      Bb,
                     >Every time I close my eyes 
-                    G#                      Ab
+                    G#,                      Ab,
                     >I see you and I realize 
 
               """
@@ -89,16 +89,16 @@ def get_portuguese_prompt(genre, theme, key=None, style=None, mood=None):
                     Tom: G
                     
                     [Intro]
-                    G  D  Em  C
+                    G,  D,  Em,  C
                     
                     [Verso 1]
-                    G               D
+                    G,               D,
                     >Eu sei que já me esqueceu
-                    Em              C
+                    Em,              C,
                     >Mas eu ainda penso em você
-                    G               D
+                    G,               D,
                     >A gente viveu um sonho
-                    Em               C
+                    Em,               C,
                     >Que agora virou pesadelo
               """
 
