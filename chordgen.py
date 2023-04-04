@@ -86,27 +86,36 @@ def get_portuguese_prompt(genre, theme, key=None, style=None, mood=None):
     if mood:
         mood_prompt = f", com um humor {mood}"
 
-    prompt = f"""Gere a letra e a progressão de acordes de uma música do gênero {genre} sobre {theme}{style_prompt}{mood_prompt}. 
-                 {key_prompt}Você deve colocar os acordes SOBRE as letras onde a mudança de acorde deve ocorrer. 
+    prompt = f"""Gere a letra e a progressão de acordes de uma música do gênero {genre} sobre {theme}{style_prompt}{mood_prompt}.
+                 {key_prompt}Coloque os acordes ACIMA da letra da música, na posição em que a mudança de acorde deve ocorrer.
                  Adicione o tom que gerou a progressão de acordes no início da saída.
-                 Adicione > antes de cada verso.
                  Coloque os metadados da música entre [], como [Verso 1], [Refrão].
+                 Os acordes devem estar entre pontos, por exemplo, .F#6(11). .
+                 Cada verso da letra deve começar com >.
 
                  O formato deve seguir o exemplo abaixo:
-                    Tom: G
-                    
-                    [Intro]
-                    G,  D,  Em,  C
-                    
+
+                    Tom: Cm
+
+                    [Introdução]
+                    .B. .B11. .B.
+                    .B. .B11. .B.
+                    .B. .F#6(11). .E7M.
+
                     [Verso 1]
-                    G,               D,
-                    >Eu sei que já me esqueceu
-                    Em,              C,
-                    >Mas eu ainda penso em você
-                    G,               D,
-                    >A gente viveu um sonho
-                    Em,               C,
-                    >Que agora virou pesadelo
+
+                    .B.
+                    >Olha as estrelas
+                                        .F#6(11).
+                    >Olha como o brilho para você
+                              .E7M.
+                    >E tudo que você faz
+
+                    >Sim, eram todos amarelos
+                    .B.
+                    >Eu vim junto
+                                    .F#6(11).
+                    >Escrevi uma musica pra você
               """
 
     return prompt
@@ -115,7 +124,7 @@ def get_portuguese_prompt(genre, theme, key=None, style=None, mood=None):
 def generate_song(prompt):
 
     completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-0301",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": prompt}
         ]
