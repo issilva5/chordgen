@@ -1,6 +1,6 @@
 import os
 import openai
-from flask import Flask, request
+from flask import Flask, request, Response
 from dotenv import load_dotenv
 from flask_cors import CORS, cross_origin
 
@@ -121,17 +121,49 @@ def get_portuguese_prompt(genre, theme, key=None, style=None, mood=None):
     return prompt
 
 
-def generate_song(prompt):
+def generate_song(prompt, stream = False):
 
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "user", "content": prompt}
-        ]
+        ],
+        stream=stream
     )
 
-    return completion.choices[0].message
+    return completion
 
+
+@app.route("/generate", methods=['GET'])
+@cross_origin()
+def generate_stream():
+
+    req_data = request.args.to_dict()
+    genre = req_data.get('genre')
+    theme = req_data.get('theme')
+    style = req_data.get('style')
+    mood = req_data.get('mood')
+    lang = req_data.get('lang')
+    key = req_data.get('key')
+
+    prompt = get_prompt(lang, genre, theme, key, style, mood)
+    response = generate_song(prompt, stream=True)
+
+    def stream():
+
+        buffer = ''
+
+        for chunk in response:
+
+            delta = chunk['choices'][0]['delta']
+
+            if 'content' in delta:
+                buffer += delta['content']
+                if len(buffer) >= 50:
+                    yield buffer
+                    buffer = ''
+    
+    return Response(stream(), mimetype='text/event-stream')
 
 @app.route("/generate", methods=['POST'])
 @cross_origin()
@@ -147,8 +179,7 @@ def generate():
 
     prompt = get_prompt(lang, genre, theme, key, style, mood)
     response = generate_song(prompt)
-
-    print(response['content'].split('\n'))
+    response = response.choices[0].message
 
     return {'music': response['content'].split('\n')}
 
