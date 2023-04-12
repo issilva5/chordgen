@@ -2,11 +2,11 @@ With this application, we are able to generate a song according to some *genre*,
 <br><br>
 How-to:
 1. Clone the repository\
-`https://github.com/issilva5/chordgen.git`
+`https://github.com/issilva5/tuneforge-back.git`
 2. Install the requirements\
 `pip install -r requirements.txt`
 3. Put the key and id in a `.env`
-4. Use it with `python chordgen.py``
+4. Use it with `python tuneforge.py``
 
 ## How to use it?
 
