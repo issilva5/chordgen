@@ -160,7 +160,8 @@ def generate_stream():
             if 'content' in delta:
                 buffer += delta['content']
                 if len(buffer) >= 50:
-                    yield buffer
+                    buffer = buffer.replace("\n", "\\n")
+                    yield f'event: message\ndata: {{"text": "{buffer}"}}\n\n'
                     buffer = ''
     
     return Response(stream(), mimetype='text/event-stream')
